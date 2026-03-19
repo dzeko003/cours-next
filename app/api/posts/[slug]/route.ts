@@ -1,6 +1,8 @@
 import { Post } from "@/types";
 import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
+// ton post factice
 const POST: Post = {
   id: 1,
   category: "React",
@@ -18,9 +20,15 @@ const POST: Post = {
 };
 
 export const GET = async (
-  req: Request,
-  { params }: { params: { slug: string } },
+  req: NextRequest,
+  context: { params: Promise<{ slug: string }> }, // ✅ Note le Promise ici
 ) => {
-  const { slug } = params;
+  const { slug } = await context.params; // ✅ on attend le Promise
+
+  // tu peux filtrer ton POST si tu veux correspondre au slug
+  if (slug !== POST.slug) {
+    return NextResponse.json({ error: "Post not found" }, { status: 404 });
+  }
+
   return NextResponse.json(POST, { status: 200 });
 };
