@@ -4,6 +4,7 @@ import "./globals.css";
 import Headers from "@/components/Headers";
 import ThemeProvider from "./providers/ThemeProvider";
 import Footer from "@/components/Footer";
+import QueryProvider from "./providers/QueryProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,17 +27,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className="flex flex-col justify-between min-h-screen">
-            <Headers />
-            <div className="grow">{children}</div>
-            <Footer />
-          </div>
-        </ThemeProvider>
+        <QueryProvider>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <div className="flex flex-col justify-between min-h-screen">
+              <Headers />
+              <div className="grow">{children}</div>
+              <Footer />
+            </div>
+          </ThemeProvider>
+        </QueryProvider>
       </body>
     </html>
   );
